@@ -50,7 +50,7 @@ export default function Home(props) {
 
 
             <h1 className={styles.title}>
-                Паливо Вінниця WOG
+                Паливо Вінниця WOG v1.0
             </h1>
 
             <div>
