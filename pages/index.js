@@ -45,7 +45,7 @@ export default function Home() {
     return (
         <div className={styles.container}>
             <Head>
-                <title>Create Next App</title>
+                <title>Fuel-WOG</title>
                 <meta name="Check Fuel" content="Fuel-WOG"/>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
