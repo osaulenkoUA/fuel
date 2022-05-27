@@ -3,8 +3,8 @@ import styles from '../styles/Home.module.css'
 import {useEffect, useState} from 'react'
 import axios from 'axios';
 
-export default function Home() {
-
+export default function Home(props) {
+    console.log(props)
     useEffect(() => {
         getData();
     }, [])
@@ -21,12 +21,10 @@ export default function Home() {
     }
 
 
-    const getData = async () => {
+    const getData =  () => {
         try {
-            const {data} = await axios.get('https://api.wog.ua/fuel_stations');
-            const {stations} = data?.data;
-            const vinnArr = stations?.filter(el => el?.city === "Vinnytsia");
-            const items = vinnArr.map(async (el, i) => {
+
+            const items = props.vinnArr.map(async (el, i) => {
                 const {data} = await axios.get(el?.link);
                 const list = {
                     schedule: data?.data.schedule[0],
@@ -68,4 +66,39 @@ export default function Home() {
 
         </div>
     )
+}
+
+export async function getServerSideProps(context) {
+
+
+        const res = await fetch('https://api.wog.ua/fuel_stations');
+        const {data}= await res.json();
+        const {stations} = data
+    // console.log(stations)
+const foo=[];
+        const vinnArr = stations?.filter(el => el?.city === "Вінниця");
+        vinnArr.forEach(async (el, i) => {
+          await   fetch(el?.link).then(data=>foo.push(data.json()));
+            // const {data} =  res.json()
+            // foo.push(data)
+            // console.log('--------------->data',data)
+            // return data;
+           //  const list = {
+           //      schedule: data?.data.schedule[0],
+           //      city: data?.data?.city,
+           //      adress: data?.data?.name,
+           //      desk: data?.data?.workDescription?.split(/\r?\n/),
+           //      coord: data?.data?.coordinates,
+           //  }
+           // return list
+        })
+    return {
+        props:{
+            data,
+            vinnArr,
+            stations,
+            foo
+            // items
+        }, // will be passed to the page component as props
+    }
 }
